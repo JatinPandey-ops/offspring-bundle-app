@@ -3,7 +3,7 @@
 client_id = "331dc9c52f792f831f29df86d0873d41"
 name = "Sitejojo Bundle app"
 handle = "bundle-app-146"
-application_url = "https://beef-vehicles-nathan-log.trycloudflare.com"
+application_url = "https://gauge-decrease-having-wb.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_draft_orders,read_inventory,read_locations,read_orders,read_produ
 
 [auth]
 redirect_urls = [
-  "https://beef-vehicles-nathan-log.trycloudflare.com/auth/callback",
-  "https://beef-vehicles-nathan-log.trycloudflare.com/auth/shopify/callback",
-  "https://beef-vehicles-nathan-log.trycloudflare.com/api/auth/callback"
+  "https://gauge-decrease-having-wb.trycloudflare.com/auth/callback",
+  "https://gauge-decrease-having-wb.trycloudflare.com/auth/shopify/callback",
+  "https://gauge-decrease-having-wb.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

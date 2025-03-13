@@ -20,7 +20,7 @@
     }
     const placeholderProductId = bundleVariantSelector.getAttribute('data-placeholder-id');
     console.log(placeholderProductId);
-    fetch(`https://hammerhead-app-aicas.ondigitalocean.app/api/bundle?placeholderProductId=${placeholderProductId}`)
+    fetch(`https://gauge-decrease-having-wb.trycloudflare.com/api/bundle?placeholderProductId=${placeholderProductId}`)
       .then(response => response.json())
       .then(data => {
         bundleData = data
