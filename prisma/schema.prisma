@@ -86,6 +86,7 @@ model Bundle {
   singleSizeSelection   Boolean? // New field for single size/type selection
   wipesQuantity         Int? // Optional field for the quantity of wipes
   wipeProductId         String? // Optional foreign key to the wipe product
+  wipeVariantId         String? // New field to store the variant ID without foreign key constraint
   wipeProduct           Product?        @relation(name: "WipeProduct", fields: [wipeProductId], references: [id], onDelete: SetNull) // Relation to the product model
   selectedVariantsData  Json?            // New field to store selected variants data
   bundleProducts        BundleProduct[] // Relation to BundleProduct join table

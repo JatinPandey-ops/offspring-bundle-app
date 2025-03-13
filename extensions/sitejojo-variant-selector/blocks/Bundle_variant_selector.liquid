@@ -1,0 +1,122 @@
+{{ "bundle_app.css" | asset_url | stylesheet_tag }}
+
+  <form
+  method="post"
+  action="/cart/add"
+  id="product-form-{{ section.id }}"
+  class="product-form">
+  <modal-opener
+    class="product-popup-modal__opener no-js-hidden quick-add-hidden"
+    data-modal="#PopupModal-{{ block.id }}"
+    {{ block.shopify_attributes }}>
+    <button
+      id="ProductPopup-{{ block.id }}"
+      class="product-popup-modal__button link"
+      type="button"
+      aria-haspopup="dialog"
+      style="
+              position: absolute;
+    right: 0;
+    text-decoration: underline;
+        ">
+      Size Chart
+    </button>
+  </modal-opener>
+  <a href="{{ block.settings.page.url }}" class="product-popup-modal__button link no-js">
+    Size Chart
+  </a>
+  <modal-dialog
+    id="PopupModal-{{ block.id }}"
+    class="product-popup-modal"
+    {{ block.shopify_attributes }}>
+    <div
+      role="dialog"
+      aria-label="{{ block.settings.popup_label }}"
+      aria-modal="true"
+      class="product-popup-modal__content"
+      tabindex="-1">
+      <button
+        id="ModalClose-{{ block.id }}"
+        type="button"
+        class="product-popup-modal__toggle"
+        aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon-close' %}
+      </button>
+      <div class="product-popup-modal__content-info rte">
+        {% assign size_chart_page = pages['size-chart'] %}
+        {% if size_chart_page %}
+          {{ size_chart_page.content }}
+        {% else %}
+          <p>Size chart is unavailable.</p>
+        {% endif %}
+      </div>
+    </div>
+  </modal-dialog>
+  <input
+    type="hidden"
+    name="form_type"
+    value="product">
+  <input
+    type="hidden"
+    name="utf8"
+    value="✓">
+  <input
+    type="hidden"
+    id="variant-id"
+    name="id"
+    value="{{ product.selected_or_first_available_variant.id }}">
+    <!-- Hidden input for wipes product if applicable -->
+  <input
+    type="hidden"
+    id="wipe-product-id"
+    name="properties[_Wipe Product]"
+    value="">
+  <!-- Variant Options -->
+  <div id="bundle-variant-selector" data-placeholder-id="{{ product.id }}"></div>
+
+  <!-- Add to Cart Button -->
+  <!-- Add to Cart Button -->
+  <div class="custom-buy-button-container" style="margin-top: 20px;">
+    <button
+      type="button"
+      id="custom-add-to-cart"
+      class="product-form__submit button button--full-width"
+      onClick="handleFormSubmission()">
+      <span id="button-text">
+        Add to cart
+      </span>
+      <div class="loading-overlay__spinner hidden">
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          role="presentation"
+          class="spinner"
+          viewBox="0 0 66 66"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle
+            class="path"
+            fill="none"
+            stroke-width="6"
+            cx="33"
+            cy="33"
+            r="30"></circle>
+        </svg>
+      </div>
+    </button>
+  </div>
+</form>
+{{ "bundle_app.js" | asset_url | script_tag }}
+
+{% schema %}
+  {
+    "name": "Bundle Variant Selector",
+    "target": "section",
+    "settings": [
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Product"
+      }
+    ]
+  }
+{% endschema %}

@@ -179,6 +179,7 @@ export const loader = async ({ request }) => {
 
 
 // Action function to handle form submission and save the bundle
+// Changes to make in the action function
 export const action = async ({ request }) => {
   console.log("Action function started");
 
@@ -187,9 +188,14 @@ export const action = async ({ request }) => {
   const placeholderProductId = formData.get("placeholderProductId").replace("gid://shopify/Product/", "");
   const maxSelections = parseInt(formData.get("maxSelections"), 10);
   const singleDesignSelection = formData.get("singleDesignSelection") === "true";
-  const singleSizeSelection = formData.get("singleSizeSelection") === "true"; // Add new field
+  const singleSizeSelection = formData.get("singleSizeSelection") === "true";
   const wipesQuantity = formData.get("wipesQuantity") ? parseInt(formData.get("wipesQuantity"), 10) : null;
-  let wipeProductId = formData.get("wipeProductId") ? formData.get("wipeProductId").replace("gid://shopify/Product/", "") : null;
+  
+  // Get wipe product ID
+  let wipeProductId = formData.get("wipeProductId") ? 
+    formData.get("wipeProductId").replace("gid://shopify/Product/", "") : null;
+  
+  let wipeVariantId = null; 
 
   console.log("Selected Product IDs:", selectedProductIds);
   console.log("Placeholder Product ID:", placeholderProductId);
@@ -201,11 +207,15 @@ export const action = async ({ request }) => {
       console.log("Checking wipe product...");
       const wipeProduct = await prisma.product.findUnique({
         where: { id: wipeProductId },
+        include: { variants: true }, 
       });
 
       if (!wipeProduct) {
         console.log(`Wipe product with ID ${wipeProductId} does not exist, setting wipeProductId to null.`);
-        wipeProductId = null; // Set to null if the wipe product does not exist
+        wipeProductId = null;
+      } else if (wipeProduct.variants.length > 0) {
+        wipeVariantId = wipeProduct.variants[0].id;
+        console.log(`Using first variant ID for wipe product: ${wipeVariantId}`);
       }
     }
 
@@ -213,7 +223,7 @@ export const action = async ({ request }) => {
     console.log("Fetching placeholder product from Prisma...");
     const placeholderProduct = await prisma.product.findUnique({
       where: { id: placeholderProductId },
-      include: { variants: true }, // Include variants to fetch price
+      include: { variants: true }, 
     });
 
     if (!placeholderProduct) {
@@ -226,12 +236,13 @@ export const action = async ({ request }) => {
     const bundleData = {
       id: placeholderProductId,
       userChosenName: placeholderProduct.title,
-      price: parseFloat(placeholderProduct.variants[0].price), // Using the first variant's price
-      maxSelections, // Save max selections in the bundle
-      singleDesignSelection, // Save the single design selection boolean in the bundle
+      price: parseFloat(placeholderProduct.variants[0].price), 
+      maxSelections,
+      singleDesignSelection,
       singleSizeSelection,
-      wipesQuantity, // Save wipes quantity in the bundle
-      wipeProductId, // Set wipeProductId, either as the valid ID or null
+      wipesQuantity,
+      wipeProductId, 
+      wipeVariantId, 
       bundleProducts: {
         create: selectedProductIds.map((id) => ({
           product: { connect: { id: id.replace("gid://shopify/Product/", "") } },

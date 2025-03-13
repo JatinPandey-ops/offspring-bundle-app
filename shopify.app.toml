@@ -3,7 +3,7 @@
 client_id = "331dc9c52f792f831f29df86d0873d41"
 name = "Sitejojo Bundle app"
 handle = "bundle-app-146"
-application_url = "https://v-lakes-vegas-searches.trycloudflare.com"
+application_url = "https://beef-vehicles-nathan-log.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_draft_orders,read_inventory,read_locations,read_orders,read_products,write_draft_orders,write_inventory,write_order_edits,write_products"
+scopes = "read_draft_orders,read_inventory,read_locations,read_orders,read_products,write_cart_transforms,write_draft_orders,write_inventory,write_order_edits,write_products"
 
 [auth]
 redirect_urls = [
-  "https://v-lakes-vegas-searches.trycloudflare.com/auth/callback",
-  "https://v-lakes-vegas-searches.trycloudflare.com/auth/shopify/callback",
-  "https://v-lakes-vegas-searches.trycloudflare.com/api/auth/callback"
+  "https://beef-vehicles-nathan-log.trycloudflare.com/auth/callback",
+  "https://beef-vehicles-nathan-log.trycloudflare.com/auth/shopify/callback",
+  "https://beef-vehicles-nathan-log.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

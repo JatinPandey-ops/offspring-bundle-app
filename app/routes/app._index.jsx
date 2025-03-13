@@ -97,6 +97,7 @@ export const action = async ({ request }) => {
       const singleSizeSelection = formData.get("singleSizeSelection") === "true";
       const updatedProducts = JSON.parse(formData.get("updatedProducts"));
       const wipeProductId = formData.get("wipeProductId");
+      const wipeVariantId = formData.get("wipeVariantId"); // New field for variant ID
       const wipesQuantity = parseInt(formData.get("wipesQuantity"), 10);
 
       // Create the update data object
@@ -109,6 +110,7 @@ export const action = async ({ request }) => {
         singleSizeSelection,
         wipesQuantity: wipesQuantity || null,
         wipeProductId: wipeProductId || null,
+        wipeVariantId: wipeVariantId || null, // Store the variant ID
         bundleProducts: {
           deleteMany: {},
           create: updatedProducts.map((productId) => ({
@@ -164,6 +166,7 @@ export const action = async ({ request }) => {
   }
 };
 
+
 // Main component
 export default function BundlesPage() {
   // State management
@@ -191,6 +194,8 @@ export default function BundlesPage() {
   const [wipeSearchValue, setWipeSearchValue] = useState("");
   const [filteredWipeProducts, setFilteredWipeProducts] = useState([]);
   const [wipesQuantity, setWipesQuantity] = useState(0);
+  const [selectedWipeVariant, setSelectedWipeVariant] = useState(null);
+  const [showWipeVariants, setShowWipeVariants] = useState(false);
 
   // Helper functions
   const getMainProductImage = useCallback((product) => {
@@ -216,10 +221,21 @@ export default function BundlesPage() {
     setSingleDesignSelection(bundle.singleDesignSelection || false);
     setBundleProducts(bundle.bundleProducts);
     setWipesQuantity(bundle.wipesQuantity || 0);
+    
+    // Set the selected wipe variant if it exists
+    if (bundle.wipeProduct && bundle.wipeVariantId) {
+      const variant = bundle.wipeProduct.variants.find(v => v.id === bundle.wipeVariantId);
+      setSelectedWipeVariant(variant || null);
+    } else {
+      setSelectedWipeVariant(null);
+    }
+    
     setIsModalOpen(true);
     setSearchValue("");
     setFilteredProducts([]);
   }, []);
+
+
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
@@ -285,6 +301,22 @@ export default function BundlesPage() {
       wipeProduct: product,
       wipeProductId: product.id
     }));
+    
+    // If the product has variants, show the variant selector
+    if (product.variants && product.variants.length > 0) {
+      setShowWipeVariants(true);
+      
+      // Default to first variant
+      setSelectedWipeVariant(product.variants[0]);
+    } else {
+      setShowWipeVariants(false);
+      setSelectedWipeVariant(null);
+    }
+  }, []);
+
+  const handleWipeVariantSelect = useCallback((variant) => {
+    setSelectedWipeVariant(variant);
+    setShowWipeVariants(false);
   }, []);
 
   const handleRemoveWipeProduct = useCallback(() => {
@@ -293,8 +325,11 @@ export default function BundlesPage() {
       wipeProduct: null,
       wipeProductId: null
     }));
+    setSelectedWipeVariant(null);
     setWipesQuantity(0);
+    setShowWipeVariants(false);
   }, []);
+
 
   // Save changes handler
   const handleSaveChanges = useCallback(() => {
@@ -309,6 +344,7 @@ export default function BundlesPage() {
       singleDesignSelection: singleDesignSelection.toString(),
       updatedProducts: JSON.stringify(bundleProducts.map((bp) => bp.product.id)),
       wipeProductId: selectedBundle.wipeProduct?.id || '',
+      wipeVariantId: selectedWipeVariant?.id || '', // Include variant ID
       wipesQuantity: wipesQuantity || 0,
     };
   
@@ -322,6 +358,7 @@ export default function BundlesPage() {
     maxSelections,
     singleDesignSelection,
     bundleProducts,
+    selectedWipeVariant,
     wipesQuantity,
     fetcher,
     closeModal,
@@ -351,6 +388,122 @@ export default function BundlesPage() {
       <p>Create product bundles to offer your customers great deals and increase sales.</p>
     </EmptyState>
   );
+
+  const renderWipeProductSection = () => (
+    <Modal.Section>
+      <BlockStack gap="400">
+        <Text variant="headingMd" as="h3">Wipe Product Settings</Text>
+        
+        <Box padding="400" background="bg-surface-secondary" borderRadius="200">
+          {selectedBundle.wipeProduct ? (
+            <BlockStack gap="300">
+              <InlineStack gap="300" align="space-between" blockAlign="center">
+                <InlineStack gap="300">
+                  <img
+                    src={getMainProductImage(selectedBundle.wipeProduct)}
+                    alt={selectedBundle.wipeProduct.title}
+                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: '4px' }}
+                  />
+                  <BlockStack gap="100">
+                    <Text variant="bodyMd" fontWeight="bold">
+                      {selectedBundle.wipeProduct.title}
+                    </Text>
+                    <Text variant="bodySm" color="subdued">
+                      Selected Wipe Product
+                    </Text>
+                  </BlockStack>
+                </InlineStack>
+                <Button 
+                  variant="plain"
+                  tone="critical"
+                  onClick={handleRemoveWipeProduct}
+                >
+                  Remove
+                </Button>
+              </InlineStack>
+              
+              {/* Show selected variant if any */}
+              {selectedWipeVariant && (
+                <Box padding="300" background="bg-subdued" borderRadius="200">
+                  <InlineStack gap="200" blockAlign="center">
+                    <Text variant="bodyMd">Selected Variant:</Text>
+                    <Text variant="bodyMd" fontWeight="bold">
+                      {selectedWipeVariant.title}
+                    </Text>
+                    <Button 
+                      variant="plain" 
+                      onClick={() => setShowWipeVariants(true)}
+                    >
+                      Change
+                    </Button>
+                  </InlineStack>
+                </Box>
+              )}
+              
+              <TextField
+                label="Wipes Quantity"
+                type="number"
+                value={wipesQuantity}
+                onChange={(value) => setWipesQuantity(parseInt(value, 10))}
+                autoComplete="off"
+                helpText="Number of wipes to include with this bundle"
+                min={0}
+              />
+            </BlockStack>
+          ) : (
+            <InlineStack align="center" gap="400">
+              <Text variant="bodyMd">No wipe product selected</Text>
+            </InlineStack>
+          )}
+        </Box>
+      </BlockStack>
+    </Modal.Section>
+  );
+
+  // Variant selector for wipe product
+  const renderWipeVariantSelector = () => {
+    if (!selectedBundle?.wipeProduct || !showWipeVariants) return null;
+    
+    const variants = selectedBundle.wipeProduct.variants || [];
+    
+    return (
+      <Modal.Section>
+        <BlockStack gap="400">
+          <Text variant="headingMd" as="h3">Select Wipe Product Variant</Text>
+          
+          {variants.length > 0 ? (
+            <ResourceList
+              resourceName={{ singular: 'variant', plural: 'variants' }}
+              items={variants}
+              renderItem={(variant) => (
+                <ResourceItem
+                  id={variant.id}
+                  onClick={() => handleWipeVariantSelect(variant)}
+                >
+                  <BlockStack gap="100">
+                    <Text variant="bodyMd" fontWeight="bold">
+                      {variant.title}
+                    </Text>
+                    <Text variant="bodySm" color="subdued">
+                      SKU: {variant.sku || 'N/A'} | Price: {formatPrice(variant.price)}
+                    </Text>
+                  </BlockStack>
+                </ResourceItem>
+              )}
+            />
+          ) : (
+            <Banner tone="warning">
+              <p>This product has no variants. Please select a different product.</p>
+            </Banner>
+          )}
+          
+          <Button onClick={() => setShowWipeVariants(false)}>
+            Cancel
+          </Button>
+        </BlockStack>
+      </Modal.Section>
+    );
+  };
 
   return (
     <Page fullWidth>
@@ -503,6 +656,7 @@ export default function BundlesPage() {
             },
           ]}
         >
+           {showWipeVariants ? renderWipeVariantSelector() : renderWipeProductSection()}
           {/* Basic Bundle Information */}
           <Modal.Section>
             <BlockStack gap="400">

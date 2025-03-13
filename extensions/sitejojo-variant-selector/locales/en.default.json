@@ -1,0 +1,16 @@
+{
+  "ratings": {
+    "bundle_app": {
+      "label": "Sitejojo Variant Selector",
+      "description": "Sitejojo Variant Selector"
+    },
+    "home": {
+      "recommendationText": "Recommended Product!"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart"
+    }
+}
+}

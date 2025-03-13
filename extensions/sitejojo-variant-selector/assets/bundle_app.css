@@ -1,0 +1,295 @@
+#selected-design-parent {
+  position: relative;
+  min-height: 300px; /* Minimum height to ensure visibility */
+  height: auto;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+#selected-variants-display {
+  position: relative;
+  height: auto;
+  min-height: 300px; /* Base height for mobile */
+  width: 100%;
+  margin: 20px 0;
+  overflow: visible;
+}
+#img-design-1 {
+  position: absolute; 
+  top: 0px; 
+  left: 0px; 
+  width: 100px;
+}
+
+#img-design-2 {
+  position: absolute; 
+  bottom: 0px; 
+  right: 0px; 
+  width: 100px;
+}
+/* General Styles for Variant Selector */
+#bundle-variant-selector {
+    font-family: inherit;
+    color: rgb(var(--color-base-text, 0, 0, 0));
+    margin-bottom: 2rem;
+}
+
+#bundle-variant-selector h4 {
+    font-size: var(--body-font-medium);
+    margin-bottom: 1rem;
+}
+#selected-variants-display {
+        position: relative;
+  height: 25em;
+}
+
+/* Styles for Pills Container */
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Hide the native radio input */
+.pill input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Styles for Pills */
+.pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    background-color: rgb(var(--color-background, 255, 255, 255));
+    border: 0.2rem solid rgba(var(--color-base-text, 0, 0, 0), 0.5);
+    border-radius: var(--variant-pills-radius, 0.5rem);
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+/* Change border color on hover */
+.pill:hover {
+    border-color: rgba(var(--color-base-text, 0, 0, 0), 1);
+}
+
+/* Selected State */
+.pill.selected,
+.pill input[type="radio"]:checked + span,
+.pill input[type="radio"]:checked + img {
+    background-color: rgb(var(--colors-background-section-1, 245, 245, 245));
+    border-color: rgb(var(--button-color-border, 0, 0, 0));
+}
+
+/* Disabled State */
+.pill input[type="radio"]:disabled + span,
+.pill input[type="radio"]:disabled + img {
+    opacity: 0.7;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* Focus State */
+.pill input[type="radio"]:focus-visible + span,
+.pill input[type="radio"]:focus-visible + img {
+    outline: 0.2rem solid rgba(var(--color-base-text, 0, 0, 0), 0.5);
+    outline-offset: 0.2rem;
+}
+
+/* Styles for Image Pills */
+.pill img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Adjust padding for image pills */
+#design-options .pill {
+    padding: 0.4rem;
+    border-radius: 50%;
+}
+
+/* Selection Count */
+#selection-count {
+    font-size: 1.4rem;
+   margin: 1.2rem 0rem;
+}
+
+/* Container for Selected Variants */
+/* Selected Variant Styling */
+.selected-variant, .placeholder-variant {
+  position: absolute;
+  height: auto; 
+  width: 200px;
+  max-width: 90%; 
+  top: 55%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+
+/* Image Stack Styling */
+.image-stack, .dotted-placeholder {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Adjust images within stack */
+.image-stack img, .dotted-placeholder img {
+  width: 100%;
+  height: auto;
+  max-width: 180px; 
+  object-fit: contain;
+  border-radius: 8px;
+}
+.remove-variant {
+    position: absolute;
+    right: 30px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 15;
+    background: #00aa90;
+    color: white;
+    border-radius: 49%;
+}
+/* Tooltip Styling */
+.selected-variant .tooltip-text {
+  visibility: hidden;
+  width: 150px;
+  background-color: rgb(var(--color-background, 255, 255, 255));
+  color: rgb(var(--color-base-text, 0, 0, 0));
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: var(--buttons-radius, 0.5rem);
+  position: absolute;
+  z-index: 10;
+  top: -50px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 1.2rem;
+  border: 1px solid #00AA90;
+}
+
+.selected-variant:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Sold out */
+.pill.sold-out {
+  cursor: not-allowed;
+  opacity: 0.7;
+  position: relative;
+}
+
+.design-image-container {
+  position: relative;
+  display: inline-block;
+  width: 80px; height: 80px;
+}
+
+.sold-out-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -5%;
+  right: -5%;
+  height: 2px;
+  background-color: #ff0000;
+  transform: rotate(-45deg);
+  z-index: 2;
+}
+
+.sold-out-image {
+  filter: grayscale(100%);
+}
+
+.sold-out-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.pill.sold-out input[type="radio"] {
+  pointer-events: none;
+}
+
+@media (min-width: 1195px) {
+  #selected-variants-display {
+    min-height: 300px;
+  }
+}
+
+@media (min-width: 821px) and (max-width: 1194px) {
+  #selected-variants-display {
+    min-height: 300px;
+  }
+  
+  .selected-variant, .placeholder-variant {
+    width: 180px;
+    top: 12%;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 820px) {  
+  #selected-variants-display {
+    min-height: 200px;
+  }
+  .selected-variant, .placeholder-variant {
+    width: 120px;
+    top: 25%;
+  }  
+  .remove-variant {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+  .selected-variant .tooltip-text {
+    top: -40px;
+    width: 120px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 380px) {
+  #selected-variants-display {
+    min-height: 300px;
+    margin-top: 5rem;
+
+  }
+  .selected-variant, .placeholder-variant {
+    width: 130px;
+    top: 15%;
+  }  
+  .remove-variant {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+  
+  .selected-variant .tooltip-text {
+    top: -40px;
+    width: 120px;
+    font-size: 10px;
+  }
+}
+
+
+
