@@ -33,6 +33,7 @@ model Session {
 
 model Product {
   id              String          @id @map("shopifyProductId") // Unique ID from Shopify
+  shop            String
   title           String
   handle          String          @unique
   descriptionHtml String?
@@ -46,6 +47,7 @@ model Product {
   updatedAt       DateTime        @updatedAt
 
   wipeForBundles  Bundle[]        @relation("WipeProduct") // Relation for bundles using this product as wipes
+  @@index([shop])
 }
 
 model Variant {
@@ -78,6 +80,7 @@ model Image {
 
 model Bundle {
   id                    String          @id // Placeholder product ID from Shopify
+  shop            String
   userChosenName        String
   price                 Float
   compareAtPrice        Float?
@@ -93,6 +96,7 @@ model Bundle {
   bundleVariants        BundleVariant[]  // Relation to BundleVariant join tab
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
+   @@index([shop])
 }
 
 model BundleProduct {

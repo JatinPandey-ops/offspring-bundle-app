@@ -35,20 +35,7 @@ const shopify = shopifyApp({
     PRODUCTS_UPDATE: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: '/api/productWebhook',
-    },
-    ORDERS_PAID: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: '/api/inventory',
-    },
-    ORDERS_FULFILLED: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: '/api/inventory',
-    },
-    ORDERS_CANCELLED: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: '/api/inventory',
-    },
-
+    }
   },
   hooks: {
     afterAuth: async ({session}) => {

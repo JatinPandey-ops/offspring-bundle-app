@@ -383,7 +383,6 @@ export default function BundlesPage() {
         content: 'Create Bundle',
         onAction: () => {}, 
       }}
-      image="/api/placeholder/400/200"
     >
       <p>Create product bundles to offer your customers great deals and increase sales.</p>
     </EmptyState>

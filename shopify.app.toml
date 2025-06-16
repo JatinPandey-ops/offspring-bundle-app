@@ -1,25 +1,25 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "331dc9c52f792f831f29df86d0873d41"
+client_id = "40e8562d283c992117cad3235b69449c"
 name = "Sitejojo Bundle app"
-handle = "bundle-app-146"
-application_url = "https://gauge-decrease-having-wb.trycloudflare.com"
+handle = "sitejojo-bundle-app-3"
+application_url = "https://ecommerce-wrap-boys-retirement.trycloudflare.com"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
-dev_store_url = "ana-tomyco.myshopify.com"
+dev_store_url = "test-store-123644.myshopify.com"
 include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_draft_orders,read_inventory,read_locations,read_orders,read_products,write_cart_transforms,write_draft_orders,write_inventory,write_order_edits,write_products"
+scopes = "read_products,write_cart_transforms,write_order_edits,write_products"
 
 [auth]
 redirect_urls = [
-  "https://gauge-decrease-having-wb.trycloudflare.com/auth/callback",
-  "https://gauge-decrease-having-wb.trycloudflare.com/auth/shopify/callback",
-  "https://gauge-decrease-having-wb.trycloudflare.com/api/auth/callback"
+  "https://ecommerce-wrap-boys-retirement.trycloudflare.com/auth/callback",
+  "https://ecommerce-wrap-boys-retirement.trycloudflare.com/auth/shopify/callback",
+  "https://ecommerce-wrap-boys-retirement.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
