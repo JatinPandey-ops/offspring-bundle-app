@@ -3,13 +3,13 @@ import { authenticate } from "../shopify.server";
 
 // Use a more specific key structure for deduplication
 const processedOrders = new Set();
-const PROCESSED_ORDERS_CLEANUP_INTERVAL = 3600000; // 1 hour in milliseconds
+const PROCESSED_ORDERS_CLEANUP_INTERVAL = 3600000; 
 
 function createOrderKey(orderId, topic) {
     return `${orderId}-${topic}`;
 }
 
-// Periodically clean up old processed orders
+
 setInterval(() => {
     processedOrders.clear();
 }, PROCESSED_ORDERS_CLEANUP_INTERVAL);

@@ -3,7 +3,7 @@
 client_id = "331dc9c52f792f831f29df86d0873d41"
 name = "Sitejojo Bundle app"
 handle = "bundle-app-146"
-application_url = "https://css-bend-hello-surfing.trycloudflare.com"
+application_url = "https://sense-sake-cubic-newsletters.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_orders,read_products,write_cart_transforms,write_order_edits,write_products"
+scopes = "read_inventory,read_orders,read_products,write_cart_transforms,write_inventory,write_order_edits,write_products"
 
 [auth]
 redirect_urls = [
-  "https://css-bend-hello-surfing.trycloudflare.com/auth/callback",
-  "https://css-bend-hello-surfing.trycloudflare.com/auth/shopify/callback",
-  "https://css-bend-hello-surfing.trycloudflare.com/api/auth/callback"
+  "https://sense-sake-cubic-newsletters.trycloudflare.com/auth/callback",
+  "https://sense-sake-cubic-newsletters.trycloudflare.com/auth/shopify/callback",
+  "https://sense-sake-cubic-newsletters.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
