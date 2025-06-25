@@ -2,7 +2,7 @@
   "name": "bundle-app",
   "private": true,
   "scripts": {
-    "build": "npx prisma generate && npx prisma db push && remix vite:build",
+    "build": "npx prisma generate && remix vite:build",
     "dev": "shopify app dev",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",
