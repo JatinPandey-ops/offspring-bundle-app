@@ -1,0 +1,34 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "331dc9c52f792f831f29df86d0873d41"
+name = "Sitejojo Bundle app"
+handle = "bundle-app-146"
+application_url = "https://css-bend-hello-surfing.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "ana-tomyco.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_orders,read_products,write_cart_transforms,write_order_edits,write_products"
+
+[auth]
+redirect_urls = [
+  "https://css-bend-hello-surfing.trycloudflare.com/auth/callback",
+  "https://css-bend-hello-surfing.trycloudflare.com/auth/shopify/callback",
+  "https://css-bend-hello-surfing.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-07"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "https://casinos-hospitals-finance-follows.trycloudflare.com/webhooks"
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+
+[pos]
+embedded = false

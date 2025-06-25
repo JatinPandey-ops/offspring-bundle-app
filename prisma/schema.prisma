@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+}
+
+model Product {
+  id              String          @id @map("shopifyProductId") // Unique ID from Shopify
+  title           String
+  handle          String          @unique
+  descriptionHtml String?
+  productType     String?
+  vendor          String?
+  variants        Variant[]       @relation("ProductVariants") // Relation to Variant model
+  images          Image[]         @relation("ProductImages") // Relation to Image model
+  bundleProducts  BundleProduct[] // Relation to BundleProduct join table
+  tags            String? // Store tags as a JSON string
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  wipeForBundles  Bundle[]        @relation("WipeProduct") // Relation for bundles using this product as wipes
+}
+
+model Variant {
+  id                            String   @id // Unique ID for the variant
+  title                         String   // Title of the variant (e.g., 'Small')
+  price                         Float    // Price of the variant
+  sku                           String?  // SKU (optional)
+  inventoryQuantity             Int?     // Inventory quantity (optional)
+  selectedOptions               Json?    // Store selected options (e.g., size, color) as a JSON object
+  barcode                       String?  // Barcode (optional)
+  weight                        Float?   // Weight (optional)
+  weightUnit                    String?  // Unit for weight (optional)
+  giftCard                      Boolean? // Gift card (optional)
+  locationId                    String?  // Location ID (optional)
+  productId                     String   // Foreign key to Product model
+  bundleVariants   BundleVariant[] // Relation to BundleVariant join table
+  product                       Product  @relation(name: "ProductVariants", fields: [productId], references: [id], onDelete: Cascade) // Relation to Product model
+  createdAt                     DateTime @default(now())
+  updatedAt                     DateTime @updatedAt
+}
+
+model Image {
+  id        String  @id @default(uuid())// Unique ID for the image
+  shopifyImageId String
+  src       String   // Ensure the src is unique
+  altText   String?
+  productId String?  // Foreign key to Product model (nullable to allow shared images)
+  product   Product? @relation(name: "ProductImages", fields: [productId], references: [id], onDelete: Cascade) // Relation to Product model
+}
+
+model Bundle {
+  id                    String          @id // Placeholder product ID from Shopify
+  userChosenName        String
+  price                 Float
+  compareAtPrice        Float?
+  maxSelections         Int? // Optional field for max selections
+  singleDesignSelection Boolean? // Optional field for single design selection
+  singleSizeSelection   Boolean? // New field for single size/type selection
+  wipesQuantity         Int? // Optional field for the quantity of wipes
+  wipeProductId         String? // Optional foreign key to the wipe product
+  wipeProduct           Product?        @relation(name: "WipeProduct", fields: [wipeProductId], references: [id], onDelete: SetNull) // Relation to the product model
+  selectedVariantsData  Json?            // New field to store selected variants data
+  bundleProducts        BundleProduct[] // Relation to BundleProduct join table
+  bundleVariants        BundleVariant[]  // Relation to BundleVariant join tab
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+}
+
+model BundleProduct {
+  productId String
+  bundleId  String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  bundle    Bundle  @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+
+  @@id([productId, bundleId]) // Composite primary key
+}
+
+model BundleVariant {
+  variantId String
+  bundleId  String
+  variant   Variant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  bundle    Bundle  @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+
+  @@id([variantId , bundleId]) // Composite primary key to ensure unique bundle-variant pairs
+}
+
