@@ -23,21 +23,39 @@ export const action = async ({ request }) => {
             vendor: payload.vendor || null,
             tags: payload.tags || null,
             variants: {
-              create: payload.variants.map((variant) => ({
-                id: String(variant.id),
-                title: variant.title,
-                price: parseFloat(variant.price),
-                sku: variant.sku || null,
-                inventoryQuantity: variant.inventory_quantity || null,
-                selectedOptions: {
-                  option1: variant.option1,
-                  option2: variant.option2,
-                  option3: variant.option3
-                },
-                barcode: variant.barcode || null,
-                weight: variant.weight || null,
-                weightUnit: variant.weight_unit || null
-              }))
+              create: payload.variants.map((variant) => {
+                // Transform REST API option format to array format matching GraphQL implementation
+                const selectedOptions = [];
+                
+                // Shopify REST API webhook data includes product options array
+                if (payload.options && payload.options.length > 0) {
+                  // For each option defined in the product
+                  payload.options.forEach((option, index) => {
+                    // Get the corresponding option value from the variant (option1, option2, option3)
+                    const optionValue = variant[`option${index + 1}`];
+                    
+                    // Only add if the option value exists
+                    if (optionValue) {
+                      selectedOptions.push({
+                        name: option.name,
+                        value: optionValue
+                      });
+                    }
+                  });
+                }
+                
+                return {
+                  id: String(variant.id),
+                  title: variant.title,
+                  price: parseFloat(variant.price),
+                  sku: variant.sku || null,
+                  inventoryQuantity: variant.inventory_quantity || null,
+                  selectedOptions, // Array of {name, value} objects matching GraphQL format
+                  barcode: variant.barcode || null,
+                  weight: variant.weight || null,
+                  weightUnit: variant.weight_unit || null
+                };
+              })
             },
             images: {
               create: payload.images.map((image) => ({
@@ -73,22 +91,40 @@ export const action = async ({ request }) => {
 
           if (payload.variants && payload.variants.length > 0) {
             await tx.variant.createMany({
-              data: payload.variants.map((variant) => ({
-                id: String(variant.id),
-                productId: String(payload.id),
-                title: variant.title,
-                price: parseFloat(variant.price),
-                sku: variant.sku || null,
-                inventoryQuantity: variant.inventory_quantity || null,
-                selectedOptions: {
-                  option1: variant.option1,
-                  option2: variant.option2,
-                  option3: variant.option3
-                },
-                barcode: variant.barcode || null,
-                weight: variant.weight || null,
-                weightUnit: variant.weight_unit || null
-              }))
+              data: payload.variants.map((variant) => {
+                // Transform REST API option format to array format matching GraphQL implementation
+                const selectedOptions = [];
+                
+                // Shopify REST API webhook data includes product options array
+                if (payload.options && payload.options.length > 0) {
+                  // For each option defined in the product
+                  payload.options.forEach((option, index) => {
+                    // Get the corresponding option value from the variant (option1, option2, option3)
+                    const optionValue = variant[`option${index + 1}`];
+                    
+                    // Only add if the option value exists
+                    if (optionValue) {
+                      selectedOptions.push({
+                        name: option.name,
+                        value: optionValue
+                      });
+                    }
+                  });
+                }
+                
+                return {
+                  id: String(variant.id),
+                  productId: String(payload.id),
+                  title: variant.title,
+                  price: parseFloat(variant.price),
+                  sku: variant.sku || null,
+                  inventoryQuantity: variant.inventory_quantity || null,
+                  selectedOptions, // Array of {name, value} objects matching GraphQL format
+                  barcode: variant.barcode || null,
+                  weight: variant.weight || null,
+                  weightUnit: variant.weight_unit || null
+                };
+              })
             });
           }
 

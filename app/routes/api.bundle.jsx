@@ -34,7 +34,11 @@ export const loader = async ({ request }) => {
           },
         },
         // Include the wipeProduct if it exists
-        wipeProduct: true,
+        wipeProduct: {
+          include: {
+            variants: true,
+          },
+        },
       },
     });
 

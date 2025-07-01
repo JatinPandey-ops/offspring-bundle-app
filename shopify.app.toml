@@ -3,7 +3,7 @@
 client_id = "331dc9c52f792f831f29df86d0873d41"
 name = "Sitejojo Bundle app"
 handle = "bundle-app-146"
-application_url = "https://sense-sake-cubic-newsletters.trycloudflare.com"
+application_url = "https://explicitly-latvia-arise-conditional.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_inventory,read_orders,read_products,write_cart_transforms,write_i
 
 [auth]
 redirect_urls = [
-  "https://sense-sake-cubic-newsletters.trycloudflare.com/auth/callback",
-  "https://sense-sake-cubic-newsletters.trycloudflare.com/auth/shopify/callback",
-  "https://sense-sake-cubic-newsletters.trycloudflare.com/api/auth/callback"
+  "https://explicitly-latvia-arise-conditional.trycloudflare.com/auth/callback",
+  "https://explicitly-latvia-arise-conditional.trycloudflare.com/auth/shopify/callback",
+  "https://explicitly-latvia-arise-conditional.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
